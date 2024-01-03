@@ -4,12 +4,16 @@ using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable
+public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckable
 {
     [field: SerializeField] public float MaxHealth { get; set; } = 100f;
     public float CurrentHealth { get; set; }
     public Rigidbody2D RB { get; set; }
     public bool IsFacingRight { get; set; } = true;
+
+
+    public bool IsAggroed { get; set; }
+    public bool IsWithinStrikingDistance { get; set; }
 
     #region State Machine Variables
 
@@ -22,6 +26,7 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable
 
     #region Idle Variables
 
+    public Rigidbody2D BulletPrefab;
     public float RandomMovementRange = 5f;
     public float RandomMovementSpeed = 1f;
 
@@ -97,6 +102,20 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable
             transform.rotation = Quaternion.Euler(rotator);
             IsFacingRight = !IsFacingRight;
         }
+    }
+
+    #endregion
+
+    #region Distance Checks
+
+    public void SetAggroStatus(bool isAggroed)
+    {
+        IsAggroed = isAggroed;
+    }
+
+    public void SetStrikingDistanceBool(bool isWithingStrikingDistance)
+    {
+        IsWithinStrikingDistance = isWithingStrikingDistance;
     }
 
     #endregion

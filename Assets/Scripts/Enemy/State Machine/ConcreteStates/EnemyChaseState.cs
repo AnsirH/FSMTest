@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class EnemyChaseState : EnemyState
 {
+    private Transform _playerTransform;
+    private float _movementSpeed = 1.75f;
+
     public EnemyChaseState(Enemy enemy, EnemyStateMachine enemyStateMachine) : base(enemy, enemyStateMachine)
     {
+        _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
     }
-
+      
     public override void AnimationTriggerEvent(Enemy.AnimationTriggerType triggerType)
     {
         base.AnimationTriggerEvent(triggerType);
@@ -26,22 +30,24 @@ public class EnemyChaseState : EnemyState
     public override void FrameUpdate()
     {
         base.FrameUpdate();
+        if (!enemy.IsAggroed)
+        {
+            enemy.StateMachine.ChangeState(enemy.IdleState);
+            return;
+        }
+
+        Vector2 moveDirection = (_playerTransform.position - enemy.transform.position).normalized;
+
+        enemy.MoveEnemy(moveDirection * _movementSpeed);
+
+        if (enemy.IsWithinStrikingDistance)
+        {
+            enemy.StateMachine.ChangeState(enemy.AttackState);
+        }
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
