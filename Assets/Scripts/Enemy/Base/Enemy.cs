@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckable
+public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable/*, ITriggerCheckable*/
 {
     [field: SerializeField] public float MaxHealth { get; set; } = 100f;
     public float CurrentHealth { get; set; }
